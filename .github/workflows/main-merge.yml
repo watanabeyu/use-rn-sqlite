@@ -20,7 +20,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Beta Publish
-        run: npm publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
