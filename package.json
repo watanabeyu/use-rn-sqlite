@@ -1,6 +1,6 @@
 {
   "name": "use-rn-sqlite",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "React Native SQLite hooks.For now, only expo-sqlite is supported, but others will be supported in the future.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -17,8 +17,15 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Install can-npm-publish
+        run: npm install --save-dev can-npm-publish
+      
       - name: Build
         run: npm run build
+      
+      - name: Check version
+        run: can-npm-publish
 
       - name: get-npm-version
         id: package-version
@@ -28,8 +35,14 @@ jobs:
         id: short-sha
         with:
           length: 6
+      
+      - name: Check latest version and package.json version
+        run: 
 
+      - name: Change package.json version
+        run: npm version ${{ steps.package-version.outputs.current-version}}-beta.${{ steps.short-sha.outputs.sha }} --no-git-tag-version --no-commit-hooks
+      
       - uses: JS-DevTools/npm-publish@v1
         with:
-          tag: ${{ steps.package-version.outputs.current-version}}.beta.${{ steps.short-sha.outputs.sha }}
+          tag: beta
           token: ${{ secrets.NPM_TOKEN }}
