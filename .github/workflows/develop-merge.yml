@@ -1,0 +1,45 @@
+name: Develop merge
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      SHA6: ${GITHUB_SHA::6}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install can-npm-publish
+        run: npm install --save-dev can-npm-publish
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Check version
+        run: npx can-npm-publish --verbose
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 6
+
+      - name: Change package.json version
+        run: npm version ${{ steps.package-version.outputs.current-version}}-beta.${{ steps.short-sha.outputs.sha }} --no-git-tag-version --no-commit-hooks
+      
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          tag: beta
+          token: ${{ secrets.NPM_TOKEN }}
