@@ -27,7 +27,7 @@ jobs:
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
-      - name: Beta Publish
-        run: npm publish --tag ${{ steps.package-version.outputs.current-version}}.beta.${SHORT_SHA}
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          tag: ${{ steps.package-version.outputs.current-version}}.beta.${SHORT_SHA}
+          token: ${{ secrets.NPM_TOKEN }}
