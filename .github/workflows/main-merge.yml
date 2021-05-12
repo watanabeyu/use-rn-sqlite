@@ -1,0 +1,26 @@
+name: Main merge
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      SHA6: ${GITHUB_SHA::6}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+
+      - name: Beta Publish
+        run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

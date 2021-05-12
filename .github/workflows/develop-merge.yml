@@ -1,0 +1,30 @@
+name: Develop merge
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      SHA6: ${GITHUB_SHA::6}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Beta Publish
+        run: npm publish --tag ${{ steps.package-version.outputs.current-version}}.beta.$SHA6
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
