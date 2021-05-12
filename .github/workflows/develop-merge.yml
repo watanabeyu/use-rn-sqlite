@@ -25,7 +25,7 @@ jobs:
         run: npm run build
       
       - name: Check version
-        run: npx can-npm-publish
+        run: npx can-npm-publish --verbose
 
       - name: get-npm-version
         id: package-version
